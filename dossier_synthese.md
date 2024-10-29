@@ -20,7 +20,7 @@
         - Permettre aux utilisateurs de consulter un historique de leurs performances pour observer leur évolution dans le temps.
 
     • Système RPG
-        - **Expériences :** Mettre en place un système de points d'expérience (XP), chaque séance rapporte de l’XP en fonction des exercices réalisés, du nombres de répétitions et des charges soulevées.
+        - **Expériences :** Mettre en place un système de points d'expérience (XP), chaque séance rapporte de l’XP en fonction du nombres de répétitions et des charges soulevées.
         - **Niveaux de progression :** Accumuler de l’XP permet de passer des niveaux, renforçant la motivation.
         - **Badges et récompenses :** Récompenser les utilisateurs avec des badges virtuelles pour des performances spécifiques (ex. : "Premier niveau atteint", "1000 kg soulevés").
 
