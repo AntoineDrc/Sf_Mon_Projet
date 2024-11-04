@@ -18,11 +18,11 @@ class OrdreExercice
 
     #[ORM\ManyToOne(inversedBy: 'ordreExercices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Seance $seance = null;
+    private ?Exercice $exercice = null;
 
     #[ORM\ManyToOne(inversedBy: 'ordreExercices')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Exercice $exercice = null;
+    private ?Seance $seance = null;
 
     public function getId(): ?int
     {
@@ -41,18 +41,6 @@ class OrdreExercice
         return $this;
     }
 
-    public function getSeance(): ?Seance
-    {
-        return $this->seance;
-    }
-
-    public function setSeance(?Seance $seance): static
-    {
-        $this->seance = $seance;
-
-        return $this;
-    }
-
     public function getExercice(): ?Exercice
     {
         return $this->exercice;
@@ -61,6 +49,18 @@ class OrdreExercice
     public function setExercice(?Exercice $exercice): static
     {
         $this->exercice = $exercice;
+
+        return $this;
+    }
+
+    public function getSeance(): ?Seance
+    {
+        return $this->seance;
+    }
+
+    public function setSeance(?Seance $seance): static
+    {
+        $this->seance = $seance;
 
         return $this;
     }

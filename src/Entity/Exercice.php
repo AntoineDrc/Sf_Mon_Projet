@@ -91,18 +91,18 @@ class Exercice
         return $this->series;
     }
 
-    public function addSerie(Serie $serie): static
+    public function addSeries(Serie $series): static
     {
-        if (!$this->series->contains($serie)) {
-            $this->series->add($serie);
+        if (!$this->series->contains($series)) {
+            $this->series->add($series);
         }
 
         return $this;
     }
 
-    public function removeSerie(Serie $serie): static
+    public function removeSeries(Serie $series): static
     {
-        $this->series->removeElement($serie);
+        $this->series->removeElement($series);
 
         return $this;
     }

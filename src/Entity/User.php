@@ -6,38 +6,46 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $prenom = null;
-
-    #[ORM\Column(length: 20)]
-    private ?string $role = null;
-
-    #[ORM\Column]
-    private ?int $xp = null;
-
-    #[ORM\Column]
-    private ?int $niveau = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $mail = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    #[ORM\Column(length: 180)]
+    private ?string $email = null;
 
     /**
-     * @var Collection<int, Seance>
+     * @var list<string> The user roles
      */
-    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'user', orphanRemoval: true)]
-    private Collection $seances;
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
+    #[ORM\Column(length: 50)]
+    private ?string $prenom = null;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private ?int $xp = 0;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private ?int $niveau = 0;
 
     /**
      * @var Collection<int, BadgeObtenu>
@@ -45,10 +53,16 @@ class User
     #[ORM\OneToMany(targetEntity: BadgeObtenu::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $badgeObtenus;
 
+    /**
+     * @var Collection<int, Seance>
+     */
+    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $seances;
+
     public function __construct()
     {
-        $this->seances = new ArrayCollection();
         $this->badgeObtenus = new ArrayCollection();
+        $this->seances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,26 +70,96 @@ class User
         return $this->id;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
     public function getPrenom(): ?string
     {
         return $this->prenom;
     }
 
-    public function setPrenom(?string $prenom): static
+    public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
 
         return $this;
     }
@@ -104,26 +188,32 @@ class User
         return $this;
     }
 
-    public function getMail(): ?string
+    /**
+     * @return Collection<int, BadgeObtenu>
+     */
+    public function getBadgeObtenus(): Collection
     {
-        return $this->mail;
+        return $this->badgeObtenus;
     }
 
-    public function setMail(string $mail): static
+    public function addBadgeObtenu(BadgeObtenu $badgeObtenu): static
     {
-        $this->mail = $mail;
+        if (!$this->badgeObtenus->contains($badgeObtenu)) {
+            $this->badgeObtenus->add($badgeObtenu);
+            $badgeObtenu->setUser($this);
+        }
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function removeBadgeObtenu(BadgeObtenu $badgeObtenu): static
     {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
+        if ($this->badgeObtenus->removeElement($badgeObtenu)) {
+            // set the owning side to null (unless already changed)
+            if ($badgeObtenu->getUser() === $this) {
+                $badgeObtenu->setUser(null);
+            }
+        }
 
         return $this;
     }
@@ -152,36 +242,6 @@ class User
             // set the owning side to null (unless already changed)
             if ($seance->getUser() === $this) {
                 $seance->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, BadgeObtenu>
-     */
-    public function getBadgeObtenus(): Collection
-    {
-        return $this->badgeObtenus;
-    }
-
-    public function addBadgeObtenu(BadgeObtenu $badgeObtenu): static
-    {
-        if (!$this->badgeObtenus->contains($badgeObtenu)) {
-            $this->badgeObtenus->add($badgeObtenu);
-            $badgeObtenu->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBadgeObtenu(BadgeObtenu $badgeObtenu): static
-    {
-        if ($this->badgeObtenus->removeElement($badgeObtenu)) {
-            // set the owning side to null (unless already changed)
-            if ($badgeObtenu->getUser() === $this) {
-                $badgeObtenu->setUser(null);
             }
         }
 
