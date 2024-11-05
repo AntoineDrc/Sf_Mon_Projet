@@ -2,21 +2,19 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'dashboard')]
-    public function index(): Response
+    public function index(Security $security): Response
     {
 
-        // Récupère l'utilisateur connecté
-        /** @var User $user */
-        $user = $this->getUser();
-
+        $user = $security->getUser();
 
         return $this->render('dashboard/index.html.twig', [
             'user' => $user,

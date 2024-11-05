@@ -9,6 +9,15 @@ h4 {
     margin: 0;
 }
 
+#main {
+display: flex;
+flex-direction: row;
+}
+
+.body_content {
+    padding: 2em;
+}
+
 header {
     display: flex;
     flex-direction: row;
