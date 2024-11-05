@@ -1,3 +1,34 @@
+p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+h4 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+}
+
+.user_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.user_xp_lvl {
+    display: flex;
+    gap: 1em;
+}
+
+.logo_user {
+    height: 3em;
+}
+
 .nav_logo {
     height: 2em;
 }

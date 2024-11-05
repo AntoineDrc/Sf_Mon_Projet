@@ -9,9 +9,23 @@
 
     </head>
     <body>
-        <div class="gainXp_logo">
-            <img src="{{ asset('img/gainXp.png')}}" alt="logo de l'app, 2 haltères + le nom" class="gainXp_logo">
-        </div>
+        <header>
+            <div class="gainXp_logo">
+                <img src="{{ asset('img/gainXp.png')}}" alt="logo de l'app, 2 haltères + le nom" class="gainXp_logo">
+            </div>
+            <div class="user_header">
+                <div class="user_avatar">
+                    <img src="{{ asset('img/avatar1.png') }}" alt="img avatar" class="logo_user">
+                </div>
+                <div class="user_infos">
+                    <h4>{{ user.prenom }}</h4>
+                    <div class="user_xp_lvl">
+                        <p>Level {{ user.niveau }}</p>
+                        <p>Xp {{ user.xp }}</p>
+                    </div>  
+                </div>
+            </div>
+        </header>
         <nav>
             <div class="menu_nav">
                 <div class="dashboard">
@@ -28,7 +42,7 @@
                 </div>
                 <div class="badges_defis">
                     <img src="{{ asset('img/star.png') }}" alt="logo étoile" class="nav_logo">
-                    <a href="">Badges / Défis</a>
+                    <a href="{{ path('badge')}}">Badges / Défis</a>
                 </div>
                 <div class="profil_user">
                     <img src="{{ asset('img/settings.png')}}" alt="logo engrenage" class="nav_logo">
