@@ -3,15 +3,41 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/base.css') }}">
+        {% endblock %}
+
+    </head>
+    <body>
+        <nav>
+            <div class="menu_nav">
+                <div class="dashboard">
+                    <img src="{{ asset('img/data.png') }}" alt="logo dashboard" class="nav_logo">
+                    <a href="">Tableau de bord</a>
+                </div>
+                <div class="mes_seances">
+                    <img src="{{ asset('img/weight.png') }}" alt="logo haltère" class="nav_logo">
+                    <a href="">Mes Séances</a>
+                </div>
+                <div class="statistiques">
+                    <img src="{{ asset('img/stat.png') }}" alt="logo tableau de stats" class="nav_logo">
+                    <a href="">Statistiques</a>
+                </div>
+                <div class="badges_defis">
+                    <img src="{{ asset('img/star.png') }}" alt="logo étoile" class="nav_logo">
+                    <a href="">Badges / Défis</a>
+                </div>
+                <div class="profil_user">
+                    <img src="{{ asset('img/settings.png')}}" alt="logo engrenage" class="nav_logo">
+                    <a href="">Profil</a>
+                </div>
+            </div>
+        </nav>
+        {% block body %}
         {% endblock %}
 
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        <script src="{{ asset('js/main.js') }}"></script>
         {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
     </body>
 </html>

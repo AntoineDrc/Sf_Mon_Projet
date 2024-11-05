@@ -1,0 +1,19 @@
+.nav_logo {
+    height: 2em;
+}
+
+.menu_nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.dashboard,
+.mes_seances,
+.statistiques,
+.badges_defis,
+.profil_user {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
