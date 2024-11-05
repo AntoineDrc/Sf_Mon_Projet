@@ -18,10 +18,10 @@
                     <img src="{{ asset('img/avatar1.png') }}" alt="img avatar" class="logo_user">
                 </div>
                 <div class="user_infos">
-                    <h4>{{ user.prenom }}</h4>
+                    <h4>{{ app.user.prenom }}</h4>
                     <div class="user_xp_lvl">
-                        <p>Level {{ user.niveau }}</p>
-                        <p>Xp {{ user.xp }}</p>
+                        <p>Level {{ app.user.niveau }}</p>
+                        <p>Xp {{ app.user.xp }}</p>
                     </div>  
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="mes_seances">
                     <img src="{{ asset('img/weight.png') }}" alt="logo haltère" class="nav_logo">
-                    <a href="">Mes Séances</a>
+                    <a href="{{ path('list_seance')}}">Mes Séances</a>
                 </div>
                 <div class="statistiques">
                     <img src="{{ asset('img/stat.png') }}" alt="logo tableau de stats" class="nav_logo">
