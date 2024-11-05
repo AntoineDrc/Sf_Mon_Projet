@@ -1,0 +1,15 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.gainXp_logo {
+    height: 7em;
+}
+
+body {
+    background: url('/img/background.png') no-repeat center center fixed;
+    background-size: cover;
+}
+
