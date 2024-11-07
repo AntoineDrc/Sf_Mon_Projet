@@ -59,11 +59,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $seances;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
+
+    /**
+     * @var Collection<int, BadgeObtenu>
+     */
+    #[ORM\OneToMany(targetEntity: BadgeObtenu::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $badgeObtenus;
+
 
     public function __construct()
     {
         $this->favoris = new ArrayCollection();
         $this->seances = new ArrayCollection();
+        $this->badgeObtenus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,6 +253,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($seance->getUser() === $this) {
                 $seance->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BadgeObtenu>
+     */
+    public function getBadgeObtenus(): Collection
+    {
+        return $this->badgeObtenus;
+    }
+
+    public function addBadgeObtenu(BadgeObtenu $badgeObtenu): static
+    {
+        if (!$this->badgeObtenus->contains($badgeObtenu)) {
+            $this->badgeObtenus->add($badgeObtenu);
+            $badgeObtenu->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBadgeObtenu(BadgeObtenu $badgeObtenu): static
+    {
+        if ($this->badgeObtenus->removeElement($badgeObtenu)) {
+            // set the owning side to null (unless already changed)
+            if ($badgeObtenu->getUser() === $this) {
+                $badgeObtenu->setUser(null);
             }
         }
 
