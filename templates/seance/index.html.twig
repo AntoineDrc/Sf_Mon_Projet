@@ -3,16 +3,15 @@
 {% block title %}Hello SeanceController!{% endblock %}
 
 {% block body %}
-    {# {% if seances is empty %}
+    {% if seances is empty %}
         <p>Aucune séance trouvée</p>
     {% else %}
         <div class="seances_list">
             {% for seance in seances %}
                 <div class="seance_card">
-                    <h3>{{ seance.typeSeance }}</h3>
                     <p>Date : {{ seance.dateSeance|date('d-m-Y H:i') }}</p>
                 </div>
             {% endfor %}
         </div>
-    {% endif %} #}
+    {% endif %}
 {% endblock %}
