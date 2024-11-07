@@ -47,22 +47,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => 0])]
     private ?int $niveau = 0;
 
-    /**
-     * @var Collection<int, BadgeObtenu>
-     */
-    #[ORM\OneToMany(targetEntity: BadgeObtenu::class, mappedBy: 'user', orphanRemoval: true)]
-    private Collection $badgeObtenus;
-
-    /**
-     * @var Collection<int, Seance>
-     */
-    #[ORM\OneToMany(targetEntity: Seance::class, mappedBy: 'user', orphanRemoval: true)]
-    private Collection $seances;
 
     public function __construct()
     {
-        $this->badgeObtenus = new ArrayCollection();
-        $this->seances = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -188,63 +176,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, BadgeObtenu>
-     */
-    public function getBadgeObtenus(): Collection
-    {
-        return $this->badgeObtenus;
-    }
-
-    public function addBadgeObtenu(BadgeObtenu $badgeObtenu): static
-    {
-        if (!$this->badgeObtenus->contains($badgeObtenu)) {
-            $this->badgeObtenus->add($badgeObtenu);
-            $badgeObtenu->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBadgeObtenu(BadgeObtenu $badgeObtenu): static
-    {
-        if ($this->badgeObtenus->removeElement($badgeObtenu)) {
-            // set the owning side to null (unless already changed)
-            if ($badgeObtenu->getUser() === $this) {
-                $badgeObtenu->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Seance>
-     */
-    public function getSeances(): Collection
-    {
-        return $this->seances;
-    }
-
-    public function addSeance(Seance $seance): static
-    {
-        if (!$this->seances->contains($seance)) {
-            $this->seances->add($seance);
-            $seance->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSeance(Seance $seance): static
-    {
-        if ($this->seances->removeElement($seance)) {
-            // set the owning side to null (unless already changed)
-            if ($seance->getUser() === $this) {
-                $seance->setUser(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }
