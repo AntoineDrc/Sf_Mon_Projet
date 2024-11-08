@@ -34,6 +34,10 @@ class Exercice
     #[ORM\OneToMany(targetEntity: Serie::class, mappedBy: 'exercice', orphanRemoval: true)]
     private Collection $series;
 
+    #[ORM\ManyToOne(inversedBy: 'exercices')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Seance $seance = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -125,6 +129,18 @@ class Exercice
                 $series->setExercice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSeance(): ?Seance
+    {
+        return $this->seance;
+    }
+
+    public function setSeance(?Seance $seance): static
+    {
+        $this->seance = $seance;
 
         return $this;
     }

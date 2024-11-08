@@ -23,7 +23,7 @@ class SeanceController extends AbstractController
         // Récupère les séances de cet utilisateur
         $seances = $seanceRepository->findBy(['user' => $user]);
 
-        return $this->render('seance/index.html.twig', [
+        return $this->render('seance/list.html.twig', [
             'seances' => $seances,
         ]);
     }

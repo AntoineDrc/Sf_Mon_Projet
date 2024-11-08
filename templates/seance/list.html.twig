@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SeanceController!{% endblock %}
+
+{% block body %}
+{% if seances is empty %}
+<p>Aucune séance trouvée</p>
+{% else %}
+<div class="seances_list">
+    {% for seance in seances %}
+    <div class="seance_card">
+        <h2>{{ seance.categorie.nom }}</h2>
+        <p>Date : {{ seance.dateSeance|date('d-m-Y H:i') }}</p>
+
+        {% for exercice in seance.exercices %}
+            <h3>{{ exercice.nom }}</h3>
+            {% for serie in exercice.series %}
+                <p>Réps : {{ serie.nbReps }} Poids : {{ serie.poid }} kg</p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

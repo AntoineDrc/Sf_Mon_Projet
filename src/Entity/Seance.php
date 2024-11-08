@@ -39,9 +39,17 @@ class Seance
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Exercice>
+     */
+    #[ORM\OneToMany(targetEntity: Exercice::class, mappedBy: 'seance', orphanRemoval: true)]
+    private Collection $exercices;
+
     public function __construct()
     {
         $this->favoris = new ArrayCollection();
+        $this->isPublic = false;
+        $this->exercices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,6 +143,36 @@ class Seance
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Exercice>
+     */
+    public function getExercices(): Collection
+    {
+        return $this->exercices;
+    }
+
+    public function addExercice(Exercice $exercice): static
+    {
+        if (!$this->exercices->contains($exercice)) {
+            $this->exercices->add($exercice);
+            $exercice->setSeance($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExercice(Exercice $exercice): static
+    {
+        if ($this->exercices->removeElement($exercice)) {
+            // set the owning side to null (unless already changed)
+            if ($exercice->getSeance() === $this) {
+                $exercice->setSeance(null);
+            }
+        }
 
         return $this;
     }
