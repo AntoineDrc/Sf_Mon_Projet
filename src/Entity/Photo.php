@@ -16,7 +16,8 @@ class Photo
     #[ORM\Column(length: 100)]
     private ?string $url = null;
 
-    #[ORM\ManyToOne(inversedBy: 'photos')]
+    // Relation OneToOne avec Exercice
+    #[ORM\OneToOne(inversedBy: 'photo', targetEntity: Exercice::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Exercice $exercice = null;
 

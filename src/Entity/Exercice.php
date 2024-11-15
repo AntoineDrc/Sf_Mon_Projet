@@ -22,15 +22,10 @@ class Exercice
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
 
-    /**
-     * @var Collection<int, Photo>
-     */
-    #[ORM\OneToMany(targetEntity: Photo::class, mappedBy: 'exercice', orphanRemoval: true)]
-    private Collection $photos;
+    // Relation OneToOne avec Photo
+    #[ORM\OneToOne(targetEntity: Photo::class, mappedBy: 'exercice', cascade: ['persist', 'remove'])]
+    private ?Photo $photo = null;
 
-    /**
-     * @var Collection<int, Serie>
-     */
     #[ORM\OneToMany(targetEntity: Serie::class, mappedBy: 'exercice', orphanRemoval: true)]
     private Collection $series;
 
@@ -40,7 +35,6 @@ class Exercice
 
     public function __construct()
     {
-        $this->photos = new ArrayCollection();
         $this->series = new ArrayCollection();
     }
 
@@ -73,31 +67,19 @@ class Exercice
         return $this;
     }
 
-    /**
-     * @return Collection<int, Photo>
-     */
-    public function getPhotos(): Collection
+    // Getter et Setter pour la photo
+    public function getPhoto(): ?Photo
     {
-        return $this->photos;
+        return $this->photo;
     }
 
-    public function addPhoto(Photo $photo): static
+    public function setPhoto(?Photo $photo): static
     {
-        if (!$this->photos->contains($photo)) {
-            $this->photos->add($photo);
+        $this->photo = $photo;
+
+        // Pour gérer le côté inverse de la relation
+        if ($photo !== null && $photo->getExercice() !== $this) {
             $photo->setExercice($this);
-        }
-
-        return $this;
-    }
-
-    public function removePhoto(Photo $photo): static
-    {
-        if ($this->photos->removeElement($photo)) {
-            // set the owning side to null (unless already changed)
-            if ($photo->getExercice() === $this) {
-                $photo->setExercice(null);
-            }
         }
 
         return $this;
@@ -124,7 +106,6 @@ class Exercice
     public function removeSeries(Serie $series): static
     {
         if ($this->series->removeElement($series)) {
-            // set the owning side to null (unless already changed)
             if ($series->getExercice() === $this) {
                 $series->setExercice(null);
             }

@@ -8,17 +8,25 @@
 {% else %}
 <div class="seances_list">
     {% for seance in seances %}
-    <div class="seance_card">
-        <h2>{{ seance.categorie.nom }}</h2>
-        <p>Date : {{ seance.dateSeance|date('d-m-Y H:i') }}</p>
-
-        {% for exercice in seance.exercices %}
-            <h3>{{ exercice.nom }}</h3>
-            {% for serie in exercice.series %}
-                <p>Réps : {{ serie.nbReps }} Poids : {{ serie.poid }} kg</p>
-            {% endfor %}
-        {% endfor %}
-    </div>
+    <a href="{{ path('detail_seance', {'id': seance.id}) }}">
+        <div class="seance_card">
+            <div class="seance_img">
+                <img src="{{ asset(seance.categorie.photo) }}" alt="{{ seance.categorie.nom }}" class="muscle_img">
+            </div>
+            <div class="seance_infos">
+                <div class="seance_date">
+                    <p><img src="{{ asset('img/calendar.png') }}" alt="logo calendrier" class="calendar_logo"></p>
+                    <p>{{ seance.dateSeance|date('d-m-Y H:i') }}</p>
+                </div>
+                <div class="seance_nom">
+                    <h2>{{ seance.categorie.nom }}</h2>
+                </div>
+                <div class="seance_commentaire">
+                    <i>{{ seance.commentaire }}</i>
+                </div>
+            </div>
+        </div>
+    </a>
     {% endfor %}
 </div>
 {% endif %}

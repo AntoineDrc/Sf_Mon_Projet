@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Séance{% endblock %}
+
+{% block body %}
+<h1>Séance {{ seance.categorie.nom }} du {{ seance.dateSeance|date('d-m-Y') }}</h1>
+
+<div class="seance_detail">
+    {% for exercice in seance.exercices %}
+        <div class="seance_card_detail">
+            <div class="exercice_header">
+                <div class="exercice_nom">
+                    <h2>{{ exercice.nom }}</h2>
+                </div>
+                <div class="exercice_img">
+                    {% if exercice.photo %}
+                        <img src="{{ asset(exercice.photo.url) }}" alt="{{ exercice.nom }}">
+                    {% else %}
+                        <p>Pas de photo pour cet exercice</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="exercice_series">
+                {% for serie in exercice.series %}
+                    <div class="exercice_info">
+                        <p>{{ serie.nbReps }} répétitions à {{ serie.poid }} kg</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

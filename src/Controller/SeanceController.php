@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Seance;
 use App\Form\SeanceFormType;
+use App\Repository\PhotoRepository;
 use App\Repository\SeanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -25,6 +26,21 @@ class SeanceController extends AbstractController
 
         return $this->render('seance/list.html.twig', [
             'seances' => $seances,
+        ]);
+    }
+
+    // Méthode détail d'une séance
+    #[Route('/seance/{id}', name: 'detail_seance')]
+    public function detailSeance($id, SeanceRepository $seanceRepository, PhotoRepository $photoRepository, Security $security): Response
+    {
+        // Récupère l'utilisateur connecté via le service Security
+        $user = $security->getUser();
+
+        // Récupère les séances de cet utilisateur
+        $seance = $seanceRepository->findOneBy(['id' => $id, 'user' => $user]);
+
+        return $this->render('seance/detail.html.twig', [
+            'seance' => $seance,
         ]);
     }
 

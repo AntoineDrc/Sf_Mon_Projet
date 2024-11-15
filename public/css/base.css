@@ -34,17 +34,7 @@ header {
     gap: 1em;
 }
 
-.logo_user {
-    height: 3em;
-}
 
-.nav_logo {
-    height: 2em;
-}
-
-.gainXp_logo {
-    height: 7em;
-}
 
 .menu_nav {
     display: flex;
